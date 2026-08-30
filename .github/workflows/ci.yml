@@ -1,0 +1,82 @@
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+
+variable "project_id" {
+  description = "ID del proyecto de GCP"
+  type        = string
+}
+
+variable "region" {
+  description = "Región de GCP"
+  type        = string
+  default     = "US"
+}
+
+# Bucket de Cloud Storage para la capa Bronze (datos crudos)
+resource "google_storage_bucket" "bronze_landing" {
+  name     = "${var.project_id}-bronze-landing"
+  location = var.region
+
+  uniform_bucket_level_access = true
+
+  lifecycle_rule {
+    condition {
+      age = 90
+    }
+    action {
+      type = "Delete"
+    }
+  }
+}
+
+name: Validar Proyecto Data Engineer
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validar-notebook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validar sintaxis del notebook
+        run: |
+          pip install nbformat jupyter
+          jupyter nbconvert --to script pipeline_medallion_bikeshare.ipynb --stdout > /dev/null
+          echo "Notebook valido"
+
+  validar-terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Validar formato y sintaxis
+        run: |
+          cd terraform
+          terraform init -backend=false
+          terraform validate
