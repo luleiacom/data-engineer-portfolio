@@ -29,7 +29,7 @@ El caso de uso elegido es el dataset público de viajes de bicicletas compartida
 - **Delta Lake** — formato de tabla transaccional con soporte nativo de particionado
 - **Databricks Free Edition** — plataforma de ejecución (notebooks + compute serverless)
 
-*Nota: la arquitectura fue diseñada originalmente sobre Google Cloud Platform (BigQuery, Cloud Storage, Dataform), que es el stack específico que pide el puesto. La ejecución se migró a Databricks por una limitación de la cuenta gratuita de GCP, documentada en detalle en la siguiente sección.*
+*Nota: la arquitectura fue diseñada originalmente sobre Google Cloud Platform (BigQuery, Cloud Storage, Dataform). La ejecución se migró a Databricks por una limitación de la cuenta gratuita de GCP, documentada en detalle en la siguiente sección.*
 
 ## Problema técnico encontrado y resolución
 
