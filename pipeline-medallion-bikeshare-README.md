@@ -1,6 +1,6 @@
 # Pipeline de Datos con Arquitectura Medallion — Austin Bikeshare
 
-**Proyecto de portfolio** — Data Engineering | Preparación para postulación a Data Engineer Senior Freelance (Stefanini LATAM)
+**Proyecto de portfolio** — Data Engineering 
 
 ## Objetivo
 
