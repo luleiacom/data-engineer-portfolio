@@ -1,0 +1,20 @@
+config {
+  type: "table",
+  schema: "gold",
+  bigquery: {
+    partitionBy: "month_start"
+  }
+}
+
+SELECT
+  start_station_name,
+  DATE_TRUNC(DATE(start_time), MONTH) AS month_start,
+  COUNT(*) AS total_trips,
+  ROUND(AVG(duration_minutes), 2) AS avg_duration_minutes,
+  COUNTIF(subscriber_type = 'Walk Up') AS walkup_trips,
+  COUNTIF(subscriber_type != 'Walk Up') AS subscriber_trips
+FROM
+  ${ref("silver", "bikeshare_trips_silver")}
+GROUP BY
+  start_station_name,
+  month_start

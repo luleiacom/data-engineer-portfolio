@@ -1,0 +1,25 @@
+config {
+  type: "table",
+  schema: "silver",
+  bigquery: {
+    partitionBy: "DATE(start_time)",
+    clusterBy: ["start_station_name"]
+  }
+}
+
+SELECT
+  trip_id,
+  subscriber_type,
+  bike_id,
+  start_time,
+  start_station_id,
+  start_station_name,
+  end_station_id,
+  end_station_name,
+  duration_minutes
+FROM
+  ${ref("raw", "bikeshare_trips_raw")}
+WHERE
+  start_time IS NOT NULL
+  AND start_station_name IS NOT NULL
+  AND duration_minutes > 0
